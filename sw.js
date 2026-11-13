@@ -1,9 +1,9 @@
 // Cache dell'app per l'uso offline. Cambia VERSION a ogni rilascio.
-const VERSION = 'lav-1';
+const VERSION = 'lav-2';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css', 'lib/vexflow.js',
   'js/app.js', 'js/audio.js', 'js/capture-worklet.js', 'js/evaluate.js', 'js/generator.js',
-  'js/pitch.js', 'js/score.js', 'js/storage.js', 'js/theory.js',
+  'js/pitch.js', 'js/score.js', 'js/storage.js', 'js/theory.js', 'js/tuner.js',
   'icons/icon.svg', 'icons/icon-192.png', 'icons/icon-512.png',
 ];
 self.addEventListener('install', (e) => {

@@ -5,6 +5,7 @@ import { PitchTracker, EnergyTracker } from './pitch.js';
 import { evaluateMelody, evaluateRhythm, centsDiff, energyOnsets } from './evaluate.js';
 import { midiName, itName, degreePitch, pitchMidi } from './theory.js';
 import * as store from './storage.js';
+import { Tuner } from './tuner.js';
 
 const SIM = new URLSearchParams(location.search).has('sim');
 const $ = (id) => document.getElementById(id);
@@ -76,6 +77,14 @@ function initControls() {
   $('latency').addEventListener('input', (e) => { settings.latencyMs = +e.target.value; $('lat-out').textContent = settings.latencyMs; save(); });
   $('btn-calibrate').addEventListener('click', calibrate);
 
+  const tuner = new Tuner({
+    audio,
+    sim: SIM,
+    getSettings: () => settings,
+    getVoice: () => VOICES[settings.voiceId],
+    getDefaultRef: () => (ex && ex.mode !== 'rhythm' ? ex.tonicMidi : Math.round((VOICES[settings.voiceId].lo + VOICES[settings.voiceId].hi) / 2)),
+  });
+  $('btn-tuner').addEventListener('click', () => { stop(); tuner.open(); });
   $('btn-history').addEventListener('click', () => { renderHistory(); $('dlg-history').showModal(); });
   $('btn-clear-history').addEventListener('click', () => {
     if (confirm('Cancellare tutto lo storico? Non si può annullare.')) { store.clearHistory(); renderHistory(); }

@@ -15,6 +15,9 @@
   <header class="top">
     <h1>Lettura a vista</h1>
     <div class="top-actions">
+      <button class="icon-btn" id="btn-tuner" aria-label="Accordatore">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 3v8a3 3 0 0 0 6 0V3M12 14v7M9 21h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+      </button>
       <button class="icon-btn" id="btn-history" aria-label="Storico">
         <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
       </button>
@@ -117,6 +120,34 @@
         <span class="hint" id="cal-msg"></span>
       </div>
       <div class="dlg-actions"><button class="btn primary" value="close">Fatto</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-tuner">
+    <form method="dialog" class="dlg">
+      <h2>Accordatore</h2>
+      <div class="tu-display">
+        <div class="tu-note" id="tu-note">–</div>
+        <div class="tu-cents" id="tu-cents">Tieni una nota</div>
+        <div class="tu-hz hint" id="tu-hz"></div>
+      </div>
+      <div class="meter"><div class="meter-zone tu-zone"></div><div class="meter-needle" id="tu-needle"></div></div>
+      <p class="hint tu-src" id="tu-src"></p>
+      <canvas class="tu-graph" id="tu-graph"></canvas>
+      <h3>Nota di riferimento</h3>
+      <div class="row tu-ref-row">
+        <button type="button" class="btn ghost" id="tu-ref-down" aria-label="Semitono sotto">−</button>
+        <span class="tu-ref" id="tu-ref">–</span>
+        <button type="button" class="btn ghost" id="tu-ref-up" aria-label="Semitono sopra">+</button>
+        <button type="button" class="btn primary-soft" id="tu-ref-play">▶ Suona</button>
+      </div>
+      <label class="chip"><input type="checkbox" id="tu-compare" checked> Misura la distanza dal riferimento</label>
+      <p class="hint">Suona il riferimento, poi tienilo con la voce: verde entro 15 cent, arancio entro 35, rosso oltre. Togli la spunta per vedere solo la nota più vicina.</p>
+      <h3>Autotest</h3>
+      <p class="hint">L'app suona 5 note dall'altoparlante e controlla di riconoscerle dal microfono. Stai in silenzio.</p>
+      <div class="row"><button type="button" class="btn ghost" id="tu-selftest">Avvia autotest</button></div>
+      <div id="tu-selftest-out"></div>
+      <div class="dlg-actions"><button class="btn primary" value="close">Chiudi</button></div>
     </form>
   </dialog>
 
