@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lettura a vista</title>
+  <meta name="description" content="Esercizi di solfeggio cantato con verifica dell'intonazione e del ritmo">
+  <meta name="theme-color" content="#7a2424">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Lettura a vista</h1>
+    <div class="top-actions">
+      <button class="icon-btn" id="btn-history" aria-label="Storico">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 19V9m5 10V5m5 14v-7m5 7V8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <button class="icon-btn" id="btn-settings" aria-label="Impostazioni">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 7h10m4 0h2M4 17h4m4 0h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="2.3" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="10" cy="17" r="2.3" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel controls">
+      <div class="seg" id="mode" role="tablist">
+        <button data-mode="melody" role="tab">Melodia</button>
+        <button data-mode="intervals" role="tab">Intervalli</button>
+        <button data-mode="rhythm" role="tab">Ritmo</button>
+      </div>
+      <div class="row">
+        <label class="field grow">Livello
+          <select id="level"></select>
+        </label>
+        <label class="field">Chiave
+          <select id="clef">
+            <option value="bass">Basso</option>
+            <option value="treble">Violino</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label class="field grow">Tempo <output id="bpm-out">60</output>
+          <input type="range" id="bpm" min="40" max="140" step="2" value="60">
+        </label>
+        <label class="field">Battute
+          <span class="pair"><select id="from"></select><span>–</span><select id="to"></select></span>
+        </label>
+        <label class="chip"><input type="checkbox" id="loop"> Ripeti</label>
+      </div>
+    </section>
+
+    <div class="meta-row">
+      <div class="meta" id="meta"></div>
+      <button class="btn primary-soft" id="btn-new">Nuovo</button>
+    </div>
+    <div class="paper" id="score"></div>
+
+
+    <section class="panel result" id="result" hidden></section>
+  </main>
+
+  <footer class="transport">
+    <section class="tuner" id="tuner" hidden>
+      <div class="tuner-status" id="tuner-status">Pronto</div>
+      <div class="tuner-row">
+        <div class="tuner-note"><span class="lbl">Da cantare</span><span id="tuner-target">–</span></div>
+        <div class="tuner-note"><span class="lbl">Stai cantando</span><span id="tuner-sung">–</span></div>
+      </div>
+      <div class="meter"><div class="meter-zone"></div><div class="meter-needle" id="needle"></div></div>
+    </section>
+    <div class="chips">
+      <button class="chip-btn" id="btn-tonic">Tonica</button>
+      <button class="chip-btn" id="btn-cadence">Cadenza</button>
+      <button class="chip-btn" id="btn-first">1ª nota</button>
+      <label class="chip"><input type="checkbox" id="names"> Nomi</label>
+      <label class="chip"><input type="checkbox" id="metro"> Metronomo</label>
+    </div>
+    <div class="big">
+      <button class="btn big-btn" id="btn-listen"><span class="ico">▶</span>Ascolta</button>
+      <button class="btn big-btn primary" id="btn-sing"><span class="ico">●</span>Canta</button>
+      <button class="btn big-btn" id="btn-replay" disabled><span class="ico">↺</span>Riascolta</button>
+    </div>
+  </footer>
+
+  <dialog id="dlg-settings">
+    <form method="dialog" class="dlg">
+      <h2>Impostazioni</h2>
+      <label class="field">Voce
+        <select id="voice"></select>
+      </label>
+      <label class="field">Prima della prova
+        <select id="pretest">
+          <option value="none">Niente</option>
+          <option value="tonic">Tonica</option>
+          <option value="cadence">Cadenza e tonica</option>
+          <option value="first">Prima nota</option>
+        </select>
+      </label>
+      <label class="chip"><input type="checkbox" id="metro-during"> Metronomo durante la prova (altrimenti solo il conteggio)</label>
+      <label class="chip"><input type="checkbox" id="fold"> Accetta la nota giusta anche all'ottava</label>
+      <label class="chip"><input type="checkbox" id="echo"> Cancellazione eco del microfono</label>
+      <h3>Volumi</h3>
+      <label class="field">Traccia <input type="range" id="vol-track" min="0" max="1.5" step="0.05"></label>
+      <label class="field">Voce registrata <input type="range" id="vol-voice" min="0" max="2" step="0.05"></label>
+      <label class="field">Metronomo <input type="range" id="vol-click" min="0" max="1.5" step="0.05"></label>
+      <h3>Latenza</h3>
+      <p class="hint">Il ritardo tra altoparlante e microfono del telefono. La calibrazione suona 8 colpi e misura quando il microfono li sente: stai in silenzio e tieni il volume medio-alto.</p>
+      <label class="field">Compensazione <output id="lat-out"></output> ms
+        <input type="range" id="latency" min="0" max="400" step="5">
+      </label>
+      <div class="row">
+        <button type="button" class="btn ghost" id="btn-calibrate">Calibra</button>
+        <span class="hint" id="cal-msg"></span>
+      </div>
+      <div class="dlg-actions"><button class="btn primary" value="close">Fatto</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-history">
+    <form method="dialog" class="dlg">
+      <h2>Storico</h2>
+      <div id="history-body"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn ghost" id="btn-clear-history">Cancella storico</button>
+        <button class="btn primary" value="close">Chiudi</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="lib/vexflow.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
