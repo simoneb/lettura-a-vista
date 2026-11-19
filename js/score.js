@@ -69,7 +69,7 @@ export class ScoreView {
         this.measureBoxes.push({ m, x0: x, x1: x + width, y0: y - 10, y1: y + sysH - 30, sys: s });
 
         const vfNotes = byMeasure[m].map((n) => this.makeNote(n, ex, showNames, colors));
-        const voice = new VF.Voice({ num_beats: ts.num, beat_value: ts.den }).setMode(VF.Voice.Mode.SOFT);
+        const voice = new VF.Voice({ num_beats: ts.num, beat_value: ts.den }).setMode(VF.Voice.Mode.STRICT);
         voice.addTickables(vfNotes);
         if (clef !== 'percussion') VF.Accidental.applyAccidentals([voice], ex.key.vex);
         const beams = VF.Beam.generateBeams(vfNotes.filter((v) => !v.isRest()), { groups: VF.Beam.getDefaultBeamGroups(timeStr) });
@@ -124,7 +124,7 @@ export class ScoreView {
     if (n.rest) key = REST_KEY[clef];
     else if (ex.clef === 'percussion') key = 'b/4';
     else key = vexKey(n.written);
-    const sn = new VF.StaveNote({ keys: [key], duration: d + (n.rest ? 'r' : ''), clef: clef === 'percussion' ? 'treble' : clef, auto_stem: true });
+    const sn = new VF.StaveNote({ keys: [key], duration: d + 'd'.repeat(dots) + (n.rest ? 'r' : ''), clef: clef === 'percussion' ? 'treble' : clef, auto_stem: true });
     if (dots) VF.Dot.buildAndAttach([sn], { all: true });
     if (showNames && !n.rest && ex.clef !== 'percussion') {
       const a = new VF.Annotation(itName(n.written)).setVerticalJustification(VF.Annotation.VerticalJustify.BOTTOM);
