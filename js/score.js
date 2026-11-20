@@ -16,6 +16,7 @@ export class ScoreView {
     this.systems = [];
     this.notePos = [];
     this.onMeasureTap = null;
+    this.onNoteTap = null;
     el.addEventListener('click', (e) => this.handleTap(e));
   }
 
@@ -234,10 +235,21 @@ export class ScoreView {
   }
 
   handleTap(e) {
-    if (!this.onMeasureTap || !this.svg) return;
+    if (!this.svg) return;
     const rect = this.svg.getBoundingClientRect();
     const x = e.clientX - rect.left; const y = e.clientY - rect.top;
     const box = this.measureBoxes.find((b) => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1);
-    if (box) this.onMeasureTap(box.m);
+    if (!box) return;
+    if (this.onMeasureTap) this.onMeasureTap(box.m);
+    if (this.onNoteTap) {
+      // nota più vicina al tocco nella battuta toccata
+      let best = null;
+      for (const n of this.ex.notes) {
+        if (n.measure !== box.m || n.rest) continue;
+        const d = Math.abs(this.notePos[n.i].x - x);
+        if (!best || d < best.d) best = { n, d };
+      }
+      if (best) this.onNoteTap(best.n);
+    }
   }
 }

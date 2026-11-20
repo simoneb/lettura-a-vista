@@ -55,6 +55,11 @@ function initControls() {
   $('metro').addEventListener('change', (e) => { settings.metronome = e.target.checked; save(); });
   $('btn-new').addEventListener('click', () => { stop(); newExercise(); });
 
+  score.onNoteTap = (n) => {
+    if (run || ex.mode === 'rhythm') return;
+    withAudio(() => audio.note(n.midi, audio.now + 0.02, 1));
+  };
+
   $('btn-tonic').addEventListener('click', () => withAudio(() => playTonic(audio.now + 0.05)));
   $('btn-cadence').addEventListener('click', () => withAudio(() => playCadence(audio.now + 0.05)));
   $('btn-first').addEventListener('click', () => withAudio(() => playFirst(audio.now + 0.05)));

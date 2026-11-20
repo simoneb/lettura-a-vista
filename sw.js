@@ -1,5 +1,5 @@
 // Cache dell'app per l'uso offline. Cambia VERSION a ogni rilascio.
-const VERSION = 'lav-3';
+const VERSION = 'lav-4';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css', 'lib/vexflow.js',
   'js/app.js', 'js/audio.js', 'js/capture-worklet.js', 'js/evaluate.js', 'js/generator.js',
